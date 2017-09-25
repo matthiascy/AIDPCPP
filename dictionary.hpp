@@ -1,82 +1,158 @@
 #include <iostream>
 #include <string>
 
+namespace dictionary {
 
-struct Record {
-  std::string key;
-  std::string value;
-};
+  const int kInitSize = 64;
 
-struct dictionary_interface {
-  virtual ~dictionary_interface() = default;
-  virtual bool isEmpty() const = 0;
-  virtual bool containsKey(std::string key) const = 0;
-  virtual std::string get(std::string key) const = 0;
-  virtual int put(std::string key, std::string value) = 0;
-};
+  struct Record {
+    std::string key;
+    std::string value;
+  };
 
+  struct IDictionary {
+    virtual ~IDictionary() = default;
 
-class Dictionary : public dictionary_interface {
-public:
-  Dictionary() {
-    _keys = nullptr;
-    _values = nullptr;
-    _cur = -1;
-  }
+    virtual bool isEmpty() const = 0;
 
-  ~Dictionary() override = default;
+    virtual bool containsKey(const std::string& key) const = 0;
 
-  bool isEmpty() const override {
-    return (_keys == nullptr || _values == nullptr);
-  }
+    virtual std::string get(const std::string& key) const = 0;
 
-  bool containsKey(std::string key) const override {
-    return (this->indexOf(key) != -1);
-  }
-
-  std::string get(std::string key) const override {
-    int index = indexOf(key);
-
-    if (index == -1)
-      return nullptr;
-    else
-      return _values[index];
-  }
-
-  int put(std::string key, std::string value) override {
-    std::cout << "Not implemented error!!!" << std::endl;
-  }
-
-  virtual void print() { };
-
-protected:
-  std::string* _keys;
-  std::string* _values;
-  int _cur;
-
-  virtual int indexOf(const std::string& key) const { }
-
-  virtual bool insert(const std::string& key, const std::string& value) { }
-};
+    virtual bool put(const std::string& key, const std::string& value) = 0;
+  };
 
 
-class OrderedDictionary : public Dictionary {
-public:
-  explicit OrderedDictionary(std::uint8_t size) : kSize(size) {
-    _keys = new std::string[kSize];
-    _values = new std::string[kSize];
-  }
+  class AbstractDictionary : public IDictionary {
+  public:
+    explicit AbstractDictionary() {
+      _keys = nullptr;
+      _values = nullptr;
+      _cur = -1;
+    }
 
-  void print() override;
+    ~AbstractDictionary() override = default;
 
-  void addRecord(const Record& r) {
-    insert(r.key, r.value);
-  }
+    bool isEmpty() const override {
+      return (_keys == nullptr || _values == nullptr);
+    }
 
-private:
-  const std::uint8_t kSize;
+    bool containsKey(const std::string& key) const override {
+      return (this->index_of(key) != -1);
+    }
 
-  int indexOf(const std::string& key) const override;
+    std::string get(const std::string& key) const override {
+      int index = index_of(key);
 
-  bool insert(const std::string& key, const std::string& value) override;
-};
+      if (index == -1)
+        return nullptr;
+      else
+        return _values[index];
+    }
+
+    bool put(const std::string& key, const std::string& value) override {
+      return insert(key, value);
+    }
+
+    virtual void print() {};
+
+  protected:
+    std::string* _keys;
+    std::string* _values;
+    int _cur;
+
+	virtual int index_of(const std::string& key) const { return -1; }
+
+	virtual bool insert(const std::string& key, const std::string& value) { return false; }
+  };
+
+  class OrderedDictionary : public AbstractDictionary {
+  public:
+    explicit OrderedDictionary() : _size(kInitSize) {
+      _keys = new std::string[_size];
+      _values = new std::string[_size];
+    }
+
+    explicit OrderedDictionary(int size) {
+      size > 0 ? _size = size : _size = kInitSize;
+      _keys = new std::string[_size];
+      _values = new std::string[_size];
+    }
+
+    ~OrderedDictionary() override {
+      delete []_keys;
+      delete []_values;
+      _keys = nullptr;
+      _values = nullptr;
+    }
+
+    void print() override;
+
+  private:
+    int _size;
+
+    int index_of(const std::string& key) const override;
+
+    bool insert(const std::string& key, const std::string& value) override;
+  };
+
+  class SortedDictionary : public AbstractDictionary {
+  public:
+    explicit SortedDictionary() : _size(kInitSize) {
+      _keys = new std::string[_size];
+      _values = new std::string[_size];
+    }
+
+    explicit SortedDictionary(int size) {
+      size > 0 ? _size = size : _size = kInitSize;
+      _keys = new std::string[_size];
+      _values = new std::string[_size];
+    }
+
+    ~SortedDictionary() override {
+      delete [] _keys;
+      delete [] _values;
+      _keys = nullptr;
+      _values = nullptr;
+    }
+
+    void print() override;
+
+  private:
+    int _size;
+
+    int index_of(const std::string& key) const override;
+
+    bool insert(const std::string& key, const std::string& value) override;
+  };
+
+  class FastDictionary : public AbstractDictionary {
+  public:
+    explicit FastDictionary() : _size(kInitSize) {
+      _keys = new std::string[_size];
+      _values = new std::string[_size];
+    }
+
+    explicit FastDictionary(int size) {
+      size > 0 ? _size = size : _size = kInitSize;
+      _keys = new std::string[_size];
+      _values = new std::string[_size];
+    }
+
+    ~FastDictionary() override {
+      delete [] _keys;
+      delete [] _values;
+      _keys = nullptr;
+      _values = nullptr;
+    }
+
+    void print() override;
+
+  private:
+    int _size;
+
+    int index_of(const std::string& key) const override;
+
+    bool insert(const std::string& key, const std::string& value) override;
+  };
+}  // !namespace dictionary

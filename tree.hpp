@@ -61,6 +61,7 @@ namespace bluebell {
       TreeNode* tmp = nullptr;
       if (_root == nullptr) {
         return false;
+
       } else {
         tmp = search(_root, item);
 

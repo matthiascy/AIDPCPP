@@ -32,4 +32,7 @@
 
 # CMake files
 *.cbp
-*cmake-build-debug/*
+cmake-build-debug/*
+
+# Visual Studio files
+.vs/*
