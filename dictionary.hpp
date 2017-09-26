@@ -172,6 +172,6 @@ namespace dictionary {
 
     bool must_grow();
 
-    int calculate_index(const std::string& key) const;
+    int calculate_index(const std::string& key, const int max_size) const;
   };
 }  // !namespace dictionary

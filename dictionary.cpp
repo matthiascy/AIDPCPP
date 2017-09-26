@@ -145,20 +145,20 @@ namespace dictionary {
       grow();
     }
 
-    int index = calculate_index(key);
+    int index = calculate_index(key, _max_size);
     _keys[index] = key;
     _values[index] = value;
     ++_cur_size;
   }
 
-  int FastDictionary::calculate_index(const std::string& key) const {
+  int FastDictionary::calculate_index(const std::string& key, const int max_size) const {
     size_t hash_code = hash_fn(key);
 
-    int index = hash_code % _max_size;
+    int index = hash_code % max_size;
 
     // handle the conflict
     while (_values[index]) {
-      index = (index+1) % _max_size;
+      index = (index+1) % max_size;
     }
   }
 
@@ -175,17 +175,26 @@ namespace dictionary {
   }
 
   bool FastDictionary::grow() {
-    std::string* tmp_keys = new std::string[_max_size * 3];
-    std::string* tmp_values = new std::string[_max_size * 3];
+    int new_size = _max_size * 3;
+    std::string* tmp_keys = new std::string[new_size];
+    std::string* tmp_values = new std::string[new_size];
 
+    // recalculate the index of all key - value
     for (int i = 0; i < _max_size; ++i) {
-      tmp_keys[i] = _keys[i];
-      tmp_values[i] = _values[i];
+      if (_keys[i]) {
+        int index = calculate_index(_keys[i], new_size);
+        tmp_keys[index] = _keys[i];
+        tmp_values[index] = _values[i];
+      }
     }
+
+    delete [] _keys;
+    delete [] _values;
 
     _keys = tmp_keys;
     _values = tmp_values;
-    _max_size *= 3;
+
+    _max_size = new_size;
   }
 
 }  // !namespace dictionary
