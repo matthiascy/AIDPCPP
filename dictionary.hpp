@@ -20,6 +20,8 @@ namespace dictionary {
     virtual std::string get(const std::string& key) const = 0;
 
     virtual bool put(const std::string& key, const std::string& value) = 0;
+
+    virtual int size() const = 0;
   };
 
 
@@ -54,6 +56,10 @@ namespace dictionary {
       return insert(key, value);
     }
 
+    int size() override {
+      return _cur;
+    }
+
     virtual void print() {};
 
   protected:
@@ -68,15 +74,15 @@ namespace dictionary {
 
   class OrderedDictionary : public AbstractDictionary {
   public:
-    explicit OrderedDictionary() : _size(kInitSize) {
-      _keys = new std::string[_size];
-      _values = new std::string[_size];
+    explicit OrderedDictionary() : _max_size(kInitSize) {
+      _keys = new std::string[_max_size];
+      _values = new std::string[_max_size];
     }
 
     explicit OrderedDictionary(int size) {
-      size > 0 ? _size = size : _size = kInitSize;
-      _keys = new std::string[_size];
-      _values = new std::string[_size];
+      size > 0 ? _max_size = size : _max_size = kInitSize;
+      _keys = new std::string[_max_size];
+      _values = new std::string[_max_size];
     }
 
     ~OrderedDictionary() override {
@@ -88,8 +94,9 @@ namespace dictionary {
 
     void print() override;
 
+
   private:
-    int _size;
+    int _max_size;
 
     int index_of(const std::string& key) const override;
 
@@ -98,15 +105,15 @@ namespace dictionary {
 
   class SortedDictionary : public AbstractDictionary {
   public:
-    explicit SortedDictionary() : _size(kInitSize) {
-      _keys = new std::string[_size];
-      _values = new std::string[_size];
+    explicit SortedDictionary() : _max_size(kInitSize) {
+      _keys = new std::string[_max_size];
+      _values = new std::string[_max_size];
     }
 
     explicit SortedDictionary(int size) {
-      size > 0 ? _size = size : _size = kInitSize;
-      _keys = new std::string[_size];
-      _values = new std::string[_size];
+      size > 0 ? _max_size = size : _max_size = kInitSize;
+      _keys = new std::string[_max_size];
+      _values = new std::string[_max_size];
     }
 
     ~SortedDictionary() override {
@@ -118,8 +125,9 @@ namespace dictionary {
 
     void print() override;
 
+
   private:
-    int _size;
+    int _max_size;
 
     int index_of(const std::string& key) const override;
 
@@ -128,15 +136,15 @@ namespace dictionary {
 
   class FastDictionary : public AbstractDictionary {
   public:
-    explicit FastDictionary() : _size(kInitSize) {
-      _keys = new std::string[_size];
-      _values = new std::string[_size];
+    explicit FastDictionary() : _max_size(kInitSize), _cur_size(0) {
+      _keys = new std::string[_max_size];
+      _values = new std::string[_max_size];
     }
 
-    explicit FastDictionary(int size) {
-      size > 0 ? _size = size : _size = kInitSize;
-      _keys = new std::string[_size];
-      _values = new std::string[_size];
+    explicit FastDictionary(int size) : _cur_size(0) {
+      size > 0 ? _max_size = size : _max_size = kInitSize;
+      _keys = new std::string[_max_size];
+      _values = new std::string[_max_size];
     }
 
     ~FastDictionary() override {
@@ -148,11 +156,22 @@ namespace dictionary {
 
     void print() override;
 
+    int size() override;
+
+    using hash_fn = std::hash<std::string>();
+
   private:
-    int _size;
+    int _max_size;
+    int _cur_size;
 
     int index_of(const std::string& key) const override;
 
     bool insert(const std::string& key, const std::string& value) override;
+
+    bool grow();
+
+    bool must_grow();
+
+    int calculate_index(const std::string& key) const;
   };
 }  // !namespace dictionary
