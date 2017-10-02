@@ -56,7 +56,7 @@ namespace dictionary {
       return insert(key, value);
     }
 
-    int size() override {
+    int size() const override {
       return _cur;
     }
 
@@ -156,9 +156,7 @@ namespace dictionary {
 
     void print() override;
 
-    int size() override;
-
-    using hash_fn = std::hash<std::string>();
+    int size() const override;
 
   private:
     int _max_size;
@@ -172,6 +170,6 @@ namespace dictionary {
 
     bool must_grow();
 
-    int calculate_index(const std::string& key, const int max_size) const;
+    int calculate_index(const std::string& key, int max_size) const;
   };
 }  // !namespace dictionary

@@ -28,10 +28,10 @@ namespace dictionary {
       _values[_cur] = value;
       return true;
     } else {
-      std::string* tmp_keys = new std::string[++_max_size];
-      std::string* tmp_values = new std::string[_max_size];
+      auto* tmp_keys = new std::string[++_max_size];
+      auto* tmp_values = new std::string[_max_size];
 
-      for (int i = 0; i < _cur, ++i) {
+      for (int i = 0; i < _cur; ++i) {
         tmp_keys[i] = _keys[i];
         tmp_values[i] = _values[i];
       }
@@ -123,7 +123,7 @@ namespace dictionary {
   }
 
   int FastDictionary::index_of(const std::string& key) const {
-    int index = hash_fn(key) % _max_size;
+    std::uint32_t index = std::hash<std::string>{}(key) % _max_size;
     int i = index + 1;
 
     if (_keys[index] == key) {
@@ -141,7 +141,7 @@ namespace dictionary {
   }
 
   bool FastDictionary::insert(const std::string& key, const std::string& value) {
-    if (mustGrow()) {
+    if (must_grow()) {
       grow();
     }
 
@@ -152,36 +152,33 @@ namespace dictionary {
   }
 
   int FastDictionary::calculate_index(const std::string& key, const int max_size) const {
-    size_t hash_code = hash_fn(key);
+    std::uint32_t hash_code = std::hash<std::string>{}(key);
 
     int index = hash_code % max_size;
 
     // handle the conflict
-    while (_values[index]) {
+    while (!_values[index].empty()) {
       index = (index+1) % max_size;
     }
   }
 
-  int FastDictionary::size() override {
+  int FastDictionary::size() const {
     return _cur_size;
   }
 
   bool FastDictionary::must_grow() {
-    if (static_cast<float>(_cur_size) / static_cast<float>(_max_size) >= 0.75) {
-      return true;
-    } else {
-      return false;
-    }
+    return static_cast<float>(_cur_size) / static_cast<float>(_max_size) >= 0.75;
   }
 
-  bool FastDictionary::grow() {
+  bool FastDictionary::grow()
+  {
     int new_size = _max_size * 3;
-    std::string* tmp_keys = new std::string[new_size];
-    std::string* tmp_values = new std::string[new_size];
+    auto* tmp_keys = new std::string[new_size];
+    auto* tmp_values = new std::string[new_size];
 
     // recalculate the index of all key - value
     for (int i = 0; i < _max_size; ++i) {
-      if (_keys[i]) {
+      if (!_keys[i].empty()) {
         int index = calculate_index(_keys[i], new_size);
         tmp_keys[index] = _keys[i];
         tmp_values[index] = _values[i];
