@@ -29,6 +29,8 @@
 
 # IDE files
 *.idea/*
+*out/*
+javasrc/.idea/*
 
 # CMake files
 *.cbp
