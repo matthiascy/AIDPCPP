@@ -1,17 +1,20 @@
 package csp;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Application {
 
     public static void main(String[] args) {
-        /*
-        String fileName = "";
+        String fileName = args[0];
         Network myNetwork;
 
         try {
-            System.out.println("Chargement du fichier : " +
-                    new java.io.File(".").getCanonicalPath() + "/" + fileName);
+            System.out.println("Chargement du fichier : " + new File(".").getCanonicalPath() + "/" + fileName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -25,15 +28,23 @@ public class Application {
 
         try {
             myNetwork = new Network(readFile);
+            System.out.println("[Debug] myNetwork : " + myNetwork);
+
+            CSP myCSP = new CSP(myNetwork);
+
+            System.out.println("One possible solution is : " + myCSP.searchSolution());
         } catch (Exception e) {
             e.printStackTrace();
         }
         try {
-            readFile.close();
+            if (readFile != null) {
+                readFile.close();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
+
+        // -----
 
         Network network = new Network();
 
@@ -145,5 +156,6 @@ public class Application {
 
         System.out.println(sample.searchSolution());
         System.out.println("final: " + sample.searchAllSolutions());
+
     }
 }

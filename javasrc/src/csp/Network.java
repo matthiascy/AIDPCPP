@@ -2,6 +2,7 @@ package csp;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -65,26 +66,30 @@ public class Network {
 	public Network(BufferedReader in) throws Exception {
 		varDom = new HashMap<String,ArrayList<Object>>();
 		constraints = new ArrayList<Constraint>();
+
 		// Les variables et domaines
 		int nbVariables = Integer.parseInt(in.readLine());		// le nombre de variables
-		for(int i=1;i<=nbVariables;i++) {
+		for(int i = 1; i <= nbVariables; i++) {
 			String[] varDeclaration = in.readLine().split(";"); // Var;Val1;Val2;Val3;...
 			ArrayList<Object> dom = new ArrayList<Object>();
 			varDom.put(varDeclaration[0], dom);
-			for(int j=1;j<varDeclaration.length;j++) dom.add(varDeclaration[j]);
+
+			for(int j = 1; j < varDeclaration.length; j++)
+			    dom.add(varDeclaration[j]);
 		}
+
 		// Les contraintes
 		int nbConstraints = Integer.parseInt(in.readLine());	// le nombre de contraintes
-		for(int k=0;k<nbConstraints;k++) {
+		for(int k = 0; k < nbConstraints; k++) {
 			Constraint c = null;
-			String type = in.readLine().trim();					// le type de la contrainte 
-			if (type.equals("ext")) c = new ConstraintExt(in);
-			// else if(type.equals("AUTRE TYPE")) c = new ConstraintTYPE(in)
-			else 
-				{
+			String type = in.readLine().trim();					// le type de la contrainte
+			if (type.equals("ext"))
+			    c = new ConstraintExt(in);
+                // else if(type.equals("AUTRE TYPE")) c = new ConstraintTYPE(in)
+			else {
 				System.out.println(type);
 				System.err.println("Type contrainte inconnu");
-				}
+            }
 				
 			addConstraint(c);
 		}
@@ -206,7 +211,7 @@ public class Network {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "Var et Dom : " + varDom + "\nConstraints :" + constraints;
+		return "Var et Dom : \n" + varDom + "\nConstraints :\n" + constraints + "\n";
 	}
 	
 	public static void main(String[] args){

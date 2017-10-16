@@ -2,6 +2,7 @@ package csp;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Pour manipuler des contraintes en extension
@@ -47,13 +48,20 @@ public class ConstraintExt extends Constraint{
 	public ConstraintExt(BufferedReader in) throws Exception{
 		super(in);
 		tuples = new ArrayList<ArrayList<Object>>();
+
 		int nbTuples = Integer.parseInt(in.readLine());		// nombre de tuples de valeurs
-		for(int j=1;j<=nbTuples;j++) {
+
+		for(int j = 1; j <= nbTuples; j++) {
 			ArrayList<Object> tuple = new ArrayList<Object>();
-			for (String v : in.readLine().split(";")) tuple.add(v);	// Val1;Val2;...;Val(arity)
+
+            // Val1;Val2;...;Val(arity)
+            tuple.addAll(Arrays.asList(in.readLine().split(";")));
+
 			if(tuple.size() != varList.size()) 
 				System.err.println("Le tuple " + tuple + " n'a pas l'arité " + varList.size() + " de la contrainte " + name);
-			else if(!tuples.add(tuple)) System.err.println("Le tuple " + tuple + " est déjà présent dans la contrainte "+ name);
+
+			else if(!tuples.add(tuple))
+			    System.err.println("Le tuple " + tuple + " est déjà présent dans la contrainte "+ name);
 		}
 	}
 	
@@ -84,6 +92,8 @@ public class ConstraintExt extends Constraint{
 	        for (String var : varList) {
                 valList.add(a.get(var));
             }
+
+            System.out.println("[Debug] valList : " + valList);
 
             return tuples.stream().noneMatch(t -> t.equals(valList));
         }
