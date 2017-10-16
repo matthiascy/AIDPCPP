@@ -33,7 +33,7 @@ public class ConstraintDif extends Constraint {
                     if (i == j)
                         continue;
 
-                    if (valList.get(i) == valList.get(j))
+                    if (valList.get(i).equals(valList.get(j)))
                         return true;
                 }
             }

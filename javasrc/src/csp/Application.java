@@ -10,7 +10,6 @@ import java.util.ArrayList;
 public class Application {
 
     public static void main(String[] args) {
-        /*
         String fileName = args[0];
         Network myNetwork;
 
@@ -46,10 +45,10 @@ public class Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        */
 
         // -----
 
+        /*
         Network network = new Network();
 
         java.lang.String[] variables = {"x", "y", "z"};
@@ -88,6 +87,6 @@ public class Application {
 
         System.out.println(sample.searchSolution());
         System.out.println("final: " + sample.searchAllSolutions());
-
+        */
     }
 }
