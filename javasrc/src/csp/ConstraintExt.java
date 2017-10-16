@@ -93,8 +93,6 @@ public class ConstraintExt extends Constraint{
                 valList.add(a.get(var));
             }
 
-            System.out.println("[Debug] valList : " + valList);
-
             return tuples.stream().noneMatch(t -> t.equals(valList));
         }
 

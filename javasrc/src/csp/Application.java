@@ -33,6 +33,8 @@ public class Application {
             CSP myCSP = new CSP(myNetwork);
 
             System.out.println("One possible solution is : " + myCSP.searchSolution());
+            ArrayList<Assignment> sol = myCSP.searchAllSolutions();
+            System.out.println("All solutions are : " + sol + "\n Nomber: " + sol.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -57,6 +59,7 @@ public class Application {
             }
         }
 
+        /*
         ArrayList<String> tuple = new ArrayList<String>(2);
         tuple.add("x");
         tuple.add("y");
@@ -156,6 +159,7 @@ public class Application {
 
         System.out.println(sample.searchSolution());
         System.out.println("final: " + sample.searchAllSolutions());
+        */
 
     }
 }
