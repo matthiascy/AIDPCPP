@@ -83,10 +83,13 @@ public class Network {
 		for(int k = 0; k < nbConstraints; k++) {
 			Constraint c = null;
 			String type = in.readLine().trim();					// le type de la contrainte
-			if (type.equals("ext"))
-			    c = new ConstraintExt(in);
-                // else if(type.equals("AUTRE TYPE")) c = new ConstraintTYPE(in)
-			else {
+			if (type.equals("ext")) {
+                c = new ConstraintExt(in);
+            } else if (type.equals("eq")) {
+                c = new ConstraintEq(in);
+            } else if (type.equals("dif")) {
+			    c = new ConstraintDif(in);
+            } else {
 				System.out.println(type);
 				System.err.println("Type contrainte inconnu");
             }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class Application {
 
     public static void main(String[] args) {
+        /*
         String fileName = args[0];
         Network myNetwork;
 
@@ -45,6 +46,7 @@ public class Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
 
         // -----
 
@@ -59,94 +61,21 @@ public class Application {
             }
         }
 
-        /*
+
         ArrayList<String> tuple = new ArrayList<String>(2);
         tuple.add("x");
         tuple.add("y");
-        ConstraintExt c1 = new ConstraintExt(tuple);
-
-        ArrayList<Object> vtuple = new ArrayList<Object>(2);
-        vtuple.add("R");
-        vtuple.add("G");
-        c1.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("R");
-        vtuple.add("B");
-        c1.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("G");
-        vtuple.add("R");
-        c1.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("G");
-        vtuple.add("B");
-        c1.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("B");
-        vtuple.add("R");
-        c1.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("B");
-        vtuple.add("G");
-        c1.addTuple(vtuple);
+        Constraint c1 = new ConstraintDif(tuple);
 
         tuple = new ArrayList<String>(2);
         tuple.add("y");
         tuple.add("z");
-        ConstraintExt c2 = new ConstraintExt(tuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("R");
-        vtuple.add("G");
-        c2.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("R");
-        vtuple.add("B");
-        c2.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("G");
-        vtuple.add("R");
-        c2.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("G");
-        vtuple.add("B");
-        c2.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("B");
-        vtuple.add("R");
-        c2.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("B");
-        vtuple.add("G");
-        c2.addTuple(vtuple);
+        Constraint c2 = new ConstraintDif(tuple);
 
         tuple = new ArrayList<String>(2);
         tuple.add("x");
         tuple.add("z");
-        ConstraintExt c3 = new ConstraintExt(tuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("R");
-        vtuple.add("G");
-        c3.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("R");
-        vtuple.add("B");
-        c3.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("G");
-        vtuple.add("R");
-        c3.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("G");
-        vtuple.add("B");
-        c3.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("B");
-        vtuple.add("R");
-        c3.addTuple(vtuple);
-        vtuple = new ArrayList<Object>(2);
-        vtuple.add("B");
-        vtuple.add("G");
-        c3.addTuple(vtuple);
+        Constraint c3 = new ConstraintDif(tuple);
 
         network.addConstraint(c1);
         network.addConstraint(c2);
@@ -159,7 +88,6 @@ public class Application {
 
         System.out.println(sample.searchSolution());
         System.out.println("final: " + sample.searchAllSolutions());
-        */
 
     }
 }
