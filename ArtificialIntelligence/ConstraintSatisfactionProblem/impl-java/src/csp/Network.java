@@ -3,7 +3,6 @@ package csp;
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
@@ -74,8 +73,7 @@ public class Network {
 			ArrayList<Object> dom = new ArrayList<Object>();
 			varDom.put(varDeclaration[0], dom);
 
-			for(int j = 1; j < varDeclaration.length; j++)
-			    dom.add(varDeclaration[j]);
+			dom.addAll(Arrays.asList(varDeclaration).subList(1, varDeclaration.length));
 		}
 
 		// Les contraintes
@@ -83,16 +81,22 @@ public class Network {
 		for(int k = 0; k < nbConstraints; k++) {
 			Constraint c = null;
 			String type = in.readLine().trim();					// le type de la contrainte
-			if (type.equals("ext")) {
-                c = new ConstraintExt(in);
-            } else if (type.equals("eq")) {
-                c = new ConstraintEq(in);
-            } else if (type.equals("dif")) {
-			    c = new ConstraintDif(in);
-            } else {
-				System.out.println(type);
-				System.err.println("Type contrainte inconnu");
-            }
+
+			switch (type) {
+				case "ext":
+					c = new ConstraintExt(in);
+					break;
+				case "eq":
+					c = new ConstraintEq(in);
+					break;
+				case "dif":
+					c = new ConstraintDif(in);
+					break;
+				default:
+					System.out.println(type);
+					System.err.println("Type contrainte inconnu");
+					break;
+			}
 				
 			addConstraint(c);
 		}
@@ -221,10 +225,10 @@ public class Network {
 		Network monCSP = new Network();
 		System.out.println("Exemple de creation d'un CSP bidon avec quelques erreurs de création \n");
 		// les variables
-		String v1 = new String("x");
-		String v2 = new String("y");
-		String v3 = new String("z");
-		String v4 = new String("w");
+		String v1 = "x";
+		String v2 = "y";
+		String v3 = "z";
+		String v4 = "w";
 		monCSP.addVariable(v1);
 		monCSP.addVariable(v2);
 		monCSP.addVariable(v3);

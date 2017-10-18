@@ -2,6 +2,7 @@ package csp;
 
 import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Classe abstraite pour une contrainte. Cette classe a vocation
@@ -62,7 +63,7 @@ public abstract class Constraint {
 		num++;
 		this.name = "C"+num;
 		varList = new ArrayList<String>();
-		for (String v : in.readLine().split(";")) varList.add(v);	// Var1;Var2;...;Var(arity)
+		Collections.addAll(varList, in.readLine().split(";"));
 	}
 	
 	/**

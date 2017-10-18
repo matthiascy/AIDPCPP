@@ -1,8 +1,6 @@
 package csp;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.stream.Collectors;
 
 /**
@@ -16,7 +14,7 @@ public class CSP {
     private Network network;			// le réseau à résoudre
     private ArrayList<Assignment> solutions; 	// les solutions du réseau (résultat de searchAllSolutions)
     private Assignment assignment;			// l'assignation courante (résultat de searchSolution)
-    int cptr;					// le compteur de noeuds explorés
+    private int cptr;					// le compteur de noeuds explorés
 
 
     /**
@@ -96,7 +94,6 @@ public class CSP {
 
         return null;
     }
-
 
 
     /********************** BACKTRACK TOUTES SOLUTIONS *******************************************/

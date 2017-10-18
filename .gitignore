@@ -28,14 +28,13 @@
 *.app
 
 # IDE files
-*.idea/*
-javasrc/out/
-javasrc/.idea/
-javasrc/javasrc.iml
+**/.idea/**
+
+**.iml
 
 # CMake files
 *.cbp
-cmake-build-debug/*
+**/cmake-build-debug/*
 
 # Visual Studio files
-.vs/*
+**/.vs/*
