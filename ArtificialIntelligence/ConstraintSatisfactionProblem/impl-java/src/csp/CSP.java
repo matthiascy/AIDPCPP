@@ -15,6 +15,7 @@ public class CSP {
     private ArrayList<Assignment> solutions; 	// les solutions du réseau (résultat de searchAllSolutions)
     private Assignment assignment;			// l'assignation courante (résultat de searchSolution)
     private int cptr;					// le compteur de noeuds explorés
+    private int count = 0;
 
 
     /**
@@ -47,7 +48,8 @@ public class CSP {
         Assignment sol = null;
         sol = backtrack(assignment);
 
-        System.out.println(cptr + " noeuds ont été explorés");
+        //System.out.println(cptr + " noeuds ont été explorés");
+        count = cptr;
         return sol;
     }
 
@@ -110,6 +112,9 @@ public class CSP {
         assignment.clear();
 
         backtrackAll(assignment);
+
+        //System.out.println("[All] " + cptr + " noeuds ont été explorés");
+        count = cptr;
 
         return solutions;
     }
@@ -220,6 +225,10 @@ public class CSP {
      */
     private boolean consistant(Assignment sol, String lastAssignedVar) {
         return network.getConstraints().stream().noneMatch(c -> c.violation(sol));
+    }
+
+    public int getCount() {
+        return count;
     }
 
 }

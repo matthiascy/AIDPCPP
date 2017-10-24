@@ -28,7 +28,16 @@ public class ConstraintEq extends Constraint {
                 valList.add(a.get(var));
             }
 
-            return valList.stream().noneMatch(varList.get(0)::equals);
+            //return valList.stream().noneMatch(varList.get(0)::equals);
+            for (int i = 0; i < valList.size(); ++i) {
+                for (int j = 0; j < valList.size(); ++j) {
+                    if (i == j)
+                        continue;
+
+                    if (!valList.get(i).equals(valList.get(j)))
+                        return true;
+                }
+            }
         }
 
         return false;
