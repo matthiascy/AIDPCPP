@@ -53,6 +53,11 @@ public class RuleBase {
 	}
 
 
+	public ArrayList<Rule> getRules() {
+		return this.rules;
+	}
+
+
 	/**
 	 * retourne une description de la base de regles
 	 * @return description de la base de faits

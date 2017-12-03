@@ -29,6 +29,7 @@
 
 # IDE files
 **/.idea/**
+**/out/**
 
 **.iml
 
