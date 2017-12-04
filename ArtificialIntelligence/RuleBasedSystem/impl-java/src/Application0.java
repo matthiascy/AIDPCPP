@@ -43,7 +43,7 @@ public class Application0 {
                     answer = "non";
                 }
 
-                System.out.println("Backword chaining: " + answer);
+                System.out.println("Backward chaining: " + answer);
             }
         }
 

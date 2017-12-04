@@ -1,9 +1,0 @@
-Benoît;Cloé
-Benoît;Djamel;Emma;Félix
-Gaelle;Djamel;Amandine
-Cloé;Félix;Amandine
-Benoît;Xéna
-Xéna;Amandine;Habiba
-Cloé;Djamel
-Xéna;Cloé;Amandine
-Xéna;Benoît;Djamel

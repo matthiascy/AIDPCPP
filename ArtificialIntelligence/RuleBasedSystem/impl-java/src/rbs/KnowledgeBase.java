@@ -5,10 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class KnowledgeBase {
     private FactBase factBase;
@@ -33,7 +29,6 @@ public class KnowledgeBase {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
 
         String facts = null;
         try {
@@ -60,7 +55,7 @@ public class KnowledgeBase {
             e.printStackTrace();
         }
 
-        this.factBaseSat = this.factBase;
+        factBaseSat.addAtoms(factBase.getAtoms());
     }
 
     public FactBase getFactBase() {
@@ -83,11 +78,7 @@ public class KnowledgeBase {
     }
 
     public void forwardChaining() {
-        ArrayList<String> atraiter = this.factBase.getAtoms().stream().
-                map(Atom::getPredicate).
-                collect(Collectors.toCollection(ArrayList::new));
-        ArrayList<String> factBaseStr = new ArrayList<>(atraiter);
-
+        ArrayList<Atom> atraiter = new ArrayList<>(this.factBase.getAtoms());
         int rule_num = this.ruleBase.size();
         int counter[] = new int[rule_num];
 
@@ -97,24 +88,23 @@ public class KnowledgeBase {
 
         while (!atraiter.isEmpty()) {
             for (int j = 0; j < atraiter.size(); ++j) {
-                String fact = atraiter.get(j);
+                Atom fact = atraiter.get(j);
                 for (int i = 0; i < rule_num; ++i) {
                     Rule rule = ruleBase.getRule(i);
                     ArrayList<Atom> hypo = rule.getHypothesis();
                     Atom conc = rule.getConclusion();
-                    if (hypo.stream().anyMatch(atom -> atom.getPredicate().equals(fact))) {
+                    if (hypo.stream().anyMatch(atom -> atom.equalsA(fact))) {
                         counter[i] -= 1;
 
                         if (counter[i] == 0) {
-                            ArrayList<String> union = new ArrayList<>(atraiter);
-                            for (String f : factBaseStr) {
-                                if (!union.contains(f)) {
+                            ArrayList<Atom> union = new ArrayList<>(atraiter);
+                            for (Atom f : factBase.getAtoms()) {
+                                if (!atomListContains(union, f)) {
                                     union.add(f);
                                 }
                             }
-                            // System.out.println(" " + union.contains(conc.getPredicate()));
-                            if (!union.contains(conc.getPredicate())) {
-                                atraiter.add(conc.getPredicate());
+                            if (!atomListContains(union, conc)) {
+                                atraiter.add(conc);
                                 this.factBaseSat.addAtomWithoutCheck(conc);
                             }
                         }
@@ -133,22 +123,22 @@ public class KnowledgeBase {
 
             for (Rule rule : ruleBase.getRules()) {
                 if (rule.getConclusion().equalsA(atomQ)) {
-                    if (!isAtomListIncludedIn(rule.getHypothesis(), atomList)) {
+                    if (!isAtomListsIntersected(rule.getHypothesis(), atomList)) {
                         int size = rule.getHypothesis().size();
                         int i = 0;
 
                         ArrayList<Atom> union = new ArrayList<>();
+
                         if (atomList != null) {
                             union.addAll(atomList);
-                            for (Atom atom : union) {
-                                if (!atom.equalsA(atomQ))
-                                    union.add(atomQ);
-                            }
+                            if (!atomListContains(union, atomQ))
+                                union.add(atomQ);
                         } else {
+
                             union.add(atomQ);
                         }
 
-                        while (i < rule.getHypothesis().size() && backwardChaining(rule.getHypothesis().get(i), union))
+                        while (i < size && backwardChaining(rule.getHypothesis().get(i), union))
                             ++i;
 
                         if (i >= size)
@@ -164,8 +154,8 @@ public class KnowledgeBase {
     /**
      * Return whether an ArrayList `atomsB` includes `atomsA`.
      */
-    private boolean isAtomListIncludedIn(ArrayList<Atom> atomsA, ArrayList<Atom> atomsB) {
-        return atomsB != null && atomsA.stream().allMatch(atom -> atomListContains(atomsB, atom));
+    private boolean isAtomListsIntersected(ArrayList<Atom> atomsA, ArrayList<Atom> atomsB) {
+        return atomsB != null && atomsA.stream().anyMatch(atom -> atomListContains(atomsB, atom));
     }
 
     /**
