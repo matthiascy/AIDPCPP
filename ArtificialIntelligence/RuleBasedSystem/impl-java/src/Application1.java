@@ -10,10 +10,12 @@ public class Application1 {
 
         System.out.println("File loaded: " + filepath);
         System.out.println("Knowledge Base: " + kb);
+        System.out.println("Rule Base(before): " + kb.getRuleBase());
 
         kb.instanciation();
 
-        /*
+        System.out.println("Rule Base(after): " + kb.getRuleBase());
+
         kb.forwardChaining();
 
         System.out.println("ForwardChaining...\n");
@@ -50,8 +52,7 @@ public class Application1 {
             }
         }
 
-                reader.close();
-                */
+        reader.close();
     }
 }
 

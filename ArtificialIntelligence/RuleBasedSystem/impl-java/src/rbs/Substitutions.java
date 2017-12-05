@@ -21,8 +21,8 @@ public class Substitutions {
                     filter(term -> (!term.isConstant() && !termListContains(variables, term))).
                     collect(Collectors.toCollection(ArrayList::new)));
         }
-        System.out.println(terms);
-        System.out.println(variables);
+        //System.out.println("Substitution terms: " + terms);
+        //System.out.println("Substitution variables: " + variables);
     }
 
     public ArrayList<Substitution> getSubstitutions() {

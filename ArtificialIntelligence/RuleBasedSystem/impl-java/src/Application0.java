@@ -6,8 +6,10 @@ import java.util.Scanner;
 public class Application0 {
 	public static void main(String[] args)
 	{
+        Scanner reader = new Scanner(System.in);
+
 	    boolean done = false;
-	    String filepath = "reunion.txt";
+	    String filepath = "td4-ex4.txt";
         KnowledgeBase kb = new KnowledgeBase(filepath);
 
         System.out.println("File loaded: " + filepath);
@@ -19,7 +21,6 @@ public class Application0 {
         System.out.println("Fact Base saturee size: " + kb.getFactBaseSat().size());
         System.out.println("Fact Base saturee: \n" + kb.getFactBaseSat());
 
-        Scanner reader = new Scanner(System.in);
         while (!done) {
             System.out.println("Enter an atom to prove('quit' to exit)> ");
             String atomStr = reader.next();

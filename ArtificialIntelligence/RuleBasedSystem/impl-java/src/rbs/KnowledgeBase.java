@@ -154,21 +154,29 @@ public class KnowledgeBase {
     }
 
     public void instanciation() {
-        RuleBase newRuleBase = new RuleBase();
+        RuleBase tmp = new RuleBase(ruleBase.getRules());
         Substitutions subs = new Substitutions(factBase, ruleBase);
         subs.generateAllSubstitutions();
-        System.out.println(subs.getSubstitutions());
+        //System.out.println(subs.getSubstitutions());
+        RuleBase out = new RuleBase();
 
         for (Substitution sub : subs.getSubstitutions()) {
             for (TermPair pair : sub) {
-                for (Rule rule : ruleBase.getRules()) {
-                    if (rule.getTerms().stream().anyMatch(term -> term.equalsT(pair.getFst())))
-                        //newRuleBase.addRule(rule.replaceVarByConstant(pair));
-                        rule.replaceVarByConstant(pair);
+                RuleBase newRuleBase = new RuleBase();
+                for (Rule rule : tmp.getRules()) {
+                    if (rule.getTerms().stream().anyMatch(term -> term.equalsT(pair.getFst()))) {
+                        newRuleBase.addRule(rule.replaceVarByConstant(pair));
+                    }
+
+                }
+                for (Rule rule : newRuleBase.getRules()) {
+                    out.addRule(rule);
+                    if (rule.getTerms().stream().anyMatch(Term::isVariable))
+                        tmp.addRule(rule);
                 }
             }
         }
-        //System.out.println(newRuleBase);
+        ruleBase = out;
     }
 
     /**
