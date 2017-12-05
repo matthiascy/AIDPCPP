@@ -109,6 +109,22 @@ public class Rule
 	{
 		return conclusion;
 	}
+
+	public ArrayList<Term> getTerms() {
+		return terms;
+	}
+
+	public void replaceVarByConstant(TermPair pair) {
+	    // TODO: 
+        String rule = "";
+        for (Atom atom : hypothesis) {
+            for (Term term : atom.getArgs())
+                rule += atom + ";";
+        }
+        rule += conclusion;
+        System.out.println("Rules:");
+        System.out.println(rule);
+    }
 	
 	/**
 	 * retourne une description de la regle

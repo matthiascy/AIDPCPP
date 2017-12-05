@@ -13,7 +13,13 @@ public class Term
 	public Term(String n, boolean c)
 	{
 		label = n;
-		constant = c;	}
+		constant = c;
+	}
+
+	public Term(Term other) {
+	    this.label = other.getLabel();
+	    this.constant = other.isConstant();
+    }
 		
 	/**
 	 * Indique si le terme est une constante

@@ -16,7 +16,7 @@ public class TermPair {
 
     @Override
     public String toString() {
-        return "TermPair: (" + fst + ", " + snd + ")";
+        return "(" + fst + ", " + snd + ")";
     }
 
     public boolean equals(TermPair other) {
@@ -24,4 +24,11 @@ public class TermPair {
         return false;
     }
 
+    public Term getFst() {
+        return fst;
+    }
+
+    public Term getSnd() {
+        return snd;
+    }
 }

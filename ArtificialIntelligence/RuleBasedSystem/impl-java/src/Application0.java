@@ -7,18 +7,19 @@ public class Application0 {
 	public static void main(String[] args)
 	{
 	    boolean done = false;
-        KnowledgeBase kb = new KnowledgeBase("reunion.txt");
+	    String filepath = "reunion.txt";
+        KnowledgeBase kb = new KnowledgeBase(filepath);
 
-        System.out.println("File loaded: reunion.txt");
+        System.out.println("File loaded: " + filepath);
         System.out.println("Knowledge Base: " + kb);
 
         kb.forwardChaining();
 
+        System.out.println("ForwardChaining...\n");
         System.out.println("Fact Base saturee size: " + kb.getFactBaseSat().size());
-        System.out.println("Fact Base saturee: " + kb.getFactBaseSat());
+        System.out.println("Fact Base saturee: \n" + kb.getFactBaseSat());
 
         Scanner reader = new Scanner(System.in);
-
         while (!done) {
             System.out.println("Enter an atom to prove('quit' to exit)> ");
             String atomStr = reader.next();

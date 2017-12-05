@@ -103,8 +103,11 @@ public class Atom
 	{
 		return predicate;
 	}
-		
-		
+
+	public ArrayList<Term> getArgs() {
+		return args;
+	}
+
 	/**
 	 * @return vrai si l'atome est un symbole propositionnel (arite 0)
 	 */

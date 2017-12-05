@@ -10,6 +10,7 @@ public class KnowledgeBase {
     private FactBase factBase;
     private FactBase factBaseSat;
     private RuleBase ruleBase;
+    //private boolean order0 = false;
 
     public KnowledgeBase() {
         this.factBase = new FactBase();
@@ -73,7 +74,8 @@ public class KnowledgeBase {
     public String toString() {
         String str = "";
         str += "\n== Fact Base ==\n" + factBase + "\n";
-        str += "==Rule Base ==\n" + ruleBase + "\n";
+        str += "== Rule Base ==\n" + ruleBase + "\n";
+        str += "== Fact Base Saturee ==\n" + factBaseSat + "\n";
         return str;
     }
 
@@ -151,8 +153,26 @@ public class KnowledgeBase {
         }
     }
 
+    public void instanciation() {
+        RuleBase newRuleBase = new RuleBase();
+        Substitutions subs = new Substitutions(factBase, ruleBase);
+        subs.generateAllSubstitutions();
+        System.out.println(subs.getSubstitutions());
+
+        for (Substitution sub : subs.getSubstitutions()) {
+            for (TermPair pair : sub) {
+                for (Rule rule : ruleBase.getRules()) {
+                    if (rule.getTerms().stream().anyMatch(term -> term.equalsT(pair.getFst())))
+                        //newRuleBase.addRule(rule.replaceVarByConstant(pair));
+                        rule.replaceVarByConstant(pair);
+                }
+            }
+        }
+        //System.out.println(newRuleBase);
+    }
+
     /**
-     * Return whether an ArrayList `atomsB` includes `atomsA`.
+     * Return whether two ArrayList `atomsB` and `atomsA` is intersected
      */
     private boolean isAtomListsIntersected(ArrayList<Atom> atomsA, ArrayList<Atom> atomsB) {
         return atomsB != null && atomsA.stream().anyMatch(atom -> atomListContains(atomsB, atom));
