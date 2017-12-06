@@ -22,9 +22,9 @@ public class Application0 {
         System.out.println("Fact Base saturee: \n" + kb.getFactBaseSat());
 
         while (!done) {
-            System.out.println("Enter an atom to prove('quit' to exit)> ");
+            System.out.println("Enter an atom to prove('exit' to exit)> ");
             String atomStr = reader.next();
-            if (atomStr.equals("quit")) {
+            if (atomStr.equals("exit")) {
                 done = true;
 
             } else {
