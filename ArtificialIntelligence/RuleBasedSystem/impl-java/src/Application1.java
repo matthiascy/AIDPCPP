@@ -9,23 +9,14 @@ public class Application1 {
         boolean done = false;
         Scanner reader = new Scanner(System.in);
         while (!done) {
-            System.out.println("Enter a request consists of atoms('exit' to exit):> ");
+            System.out.println("Enter a request consists of atoms('exit' to ):> ");
             String atomsStr = reader.nextLine();
-            // clear spaces in string
-            atomsStr = atomsStr.replaceAll("\\s","");
 
-            if (atomsStr.equals("exit")) {
-
+            if (atomsStr.equals("exit"))
                 done = true;
+            else
+                kb.handle_request(atomsStr);
 
-            } else {
-
-                String[] atomsStrs = atomsStr.split(";");
-                if (Arrays.stream(atomsStrs).allMatch(atomstr -> kb.backwardChaining(new Atom(atomstr), null)))
-                    System.out.println("True, it's been proven");
-                else
-                    System.out.println("False, it's not been proven");
-            }
         }
         reader.close();
     }
@@ -52,6 +43,3 @@ public class Application1 {
         input(kb);
     }
 }
-
-
-

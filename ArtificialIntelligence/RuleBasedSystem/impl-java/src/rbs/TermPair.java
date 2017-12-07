@@ -1,6 +1,7 @@
 package rbs;
 
 public class TermPair {
+    // fst is the variable, snd is the substitution value
     private Term fst = null;
     private Term snd = null;
 

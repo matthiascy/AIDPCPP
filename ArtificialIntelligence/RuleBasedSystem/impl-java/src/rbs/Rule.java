@@ -122,7 +122,6 @@ public class Rule {
         rulestr += conclusion;
         rulestr = rulestr.replace(pair.getFst().getLabel(), "\'" + pair.getSnd().getLabel() + "\'");
         return new Rule(rulestr);
-        //System.out.println("rule: " + rulestr);
     }
 
     /**

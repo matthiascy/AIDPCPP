@@ -14,6 +14,8 @@ public class Atom {
      *          predicat(liste de termes), ou les termes sont separes par des points virgules
      */
     public Atom(String s) {
+        // clear spaces in string
+        s = s.replaceAll("\\s","");
         args = new ArrayList<Term>();
         if (s.charAt(s.length() - 1) != ')') {// c'est donc un atome sans termes
             predicate = s;

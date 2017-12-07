@@ -10,7 +10,7 @@ public class KnowledgeBase {
     private FactBase factBase;
     private FactBase factBaseSat;
     private RuleBase ruleBase;
-    //private boolean order0 = false;
+    private boolean instanced = false;
 
     public KnowledgeBase() {
         this.factBase = new FactBase();
@@ -157,7 +157,6 @@ public class KnowledgeBase {
         RuleBase tmp = new RuleBase(ruleBase.getRules());
         Substitutions subs = new Substitutions(factBase, ruleBase);
         subs.generateAllSubstitutions();
-        //System.out.println(subs.getSubstitutions());
         RuleBase out = new RuleBase();
 
         for (Substitution sub : subs.getSubstitutions()) {
@@ -179,8 +178,47 @@ public class KnowledgeBase {
         ruleBase = out;
     }
 
+    public void handle_request(String request) {
+        String[] atomsStrs = request.split(";");
+        ArrayList<Atom> atoms = new ArrayList<>();
+        boolean hasVar = false;
+        for (String atomStr : atomsStrs) {
+            Atom atom = new Atom(atomStr);
+            if (!atomListContains(atoms, atom)) {
+                if (hasVariable(atom))
+                    hasVar = true;
+                atoms.add(atom);
+            }
+        }
+
+        System.out.println("atoms parsed: " + atoms);
+
+        // if request contains variables
+        if (hasVar) {
+
+            System.out.println("Has variables");
+            Homomorphisms solutions = new Homomorphisms(atoms, factBaseSat.getAtoms());
+            System.out.println(solutions);
+
+        } else {
+
+            if (atoms.stream().allMatch(atom -> backwardChaining(atom, null)))
+                System.out.println("True, it's been proven");
+            else
+                System.out.println("False, it's not been proven");
+        }
+    }
+
     /**
-     * Return whether two ArrayList `atomsB` and `atomsA` is intersected
+     * Decide whether an Atom contains variable
+     */
+    private boolean hasVariable(Atom atom) {
+        return atom.getArgs().stream().anyMatch(Term::isVariable);
+    }
+
+
+    /**
+     * Decide whether two ArrayLists `atomsB` and `atomsA` is intersected
      */
     private boolean isAtomListsIntersected(ArrayList<Atom> atomsA, ArrayList<Atom> atomsB) {
         return atomsB != null && atomsA.stream().anyMatch(atom -> atomListContains(atomsB, atom));

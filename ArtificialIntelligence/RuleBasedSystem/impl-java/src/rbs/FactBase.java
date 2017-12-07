@@ -31,6 +31,16 @@ public class FactBase
 		terms = new ArrayList<Term>();
 		createFactBase(factList);	
 	}
+
+	public FactBase(ArrayList<Atom> facts)
+	{
+		atoms = new ArrayList<>(facts);
+		terms = new ArrayList<>();
+		for (Atom atom : atoms) {
+			for (Term term : atom.getArgs())
+				searchOrAddTerm(term);
+		}
+	}
 	
 	/**
 	 * Remplit la base de faits avec le chaine de caracteres passee en parametres
