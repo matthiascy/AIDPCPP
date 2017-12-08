@@ -3,7 +3,7 @@ import rbs.*;
 import java.util.Scanner;
 
 
-public class Application0 {
+public class ApplicationOrder0 {
 	public static void main(String[] args)
 	{
         Scanner reader = new Scanner(System.in);

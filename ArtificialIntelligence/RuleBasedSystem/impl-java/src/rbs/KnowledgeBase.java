@@ -33,8 +33,8 @@ public class KnowledgeBase {
 
         String facts = null;
         try {
+            assert file != null;
             facts = file.readLine();
-            // System.out.println("[DEBUG]Facts :" + facts);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,12 +42,11 @@ public class KnowledgeBase {
         if (facts != null)
             this.factBase = new FactBase(facts);
 
-        String r = null;
+        String r;
         try {
             r = file.readLine();
 
             while (r != null) {
-                // System.out.println("[DEBUG]Rule :" + r);
                 Rule rule = new Rule(r);
                 this.ruleBase.addRule(rule);
                 r = file.readLine();
@@ -118,6 +117,9 @@ public class KnowledgeBase {
     }
 
     public boolean backwardChaining(Atom atomQ, ArrayList<Atom>atomList) {
+        if (!instanced)
+            instanciation();
+
         if (factBase.getAtoms().stream().anyMatch(atom -> atom.equalsA(atomQ))) {
             return true;
 
@@ -154,28 +156,31 @@ public class KnowledgeBase {
     }
 
     public void instanciation() {
-        RuleBase tmp = new RuleBase(ruleBase.getRules());
-        Substitutions subs = new Substitutions(factBase, ruleBase);
-        subs.generateAllSubstitutions();
-        RuleBase out = new RuleBase();
+        if (!instanced) {
+            RuleBase tmp = new RuleBase(ruleBase.getRules());
+            Substitutions subs = new Substitutions(factBase, ruleBase);
+            subs.generateAllSubstitutions();
+            RuleBase out = new RuleBase();
 
-        for (Substitution sub : subs.getSubstitutions()) {
-            for (TermPair pair : sub) {
-                RuleBase newRuleBase = new RuleBase();
-                for (Rule rule : tmp.getRules()) {
-                    if (rule.getTerms().stream().anyMatch(term -> term.equalsT(pair.getFst()))) {
-                        newRuleBase.addRule(rule.replaceVarByConstant(pair));
+            for (Substitution sub : subs.getSubstitutions()) {
+                for (TermPair pair : sub) {
+                    RuleBase newRuleBase = new RuleBase();
+                    for (Rule rule : tmp.getRules()) {
+                        if (rule.getTerms().stream().anyMatch(term -> term.equalsT(pair.getFst()))) {
+                            newRuleBase.addRule(rule.replaceVarByConstant(pair));
+                        }
+
                     }
-
-                }
-                for (Rule rule : newRuleBase.getRules()) {
-                    out.addRule(rule);
-                    if (rule.getTerms().stream().anyMatch(Term::isVariable))
-                        tmp.addRule(rule);
+                    for (Rule rule : newRuleBase.getRules()) {
+                        out.addRule(rule);
+                        if (rule.getTerms().stream().anyMatch(Term::isVariable))
+                            tmp.addRule(rule);
+                    }
                 }
             }
+            instanced = true;
+            ruleBase = out;
         }
-        ruleBase = out;
     }
 
     public void handle_request(String request) {
@@ -191,12 +196,11 @@ public class KnowledgeBase {
             }
         }
 
-        System.out.println("atoms parsed: " + atoms);
-
         // if request contains variables
         if (hasVar) {
 
-            System.out.println("Has variables");
+            if (!instanced)
+                forwardChaining();
             Homomorphisms solutions = new Homomorphisms(atoms, factBaseSat.getAtoms());
             System.out.println(solutions);
 

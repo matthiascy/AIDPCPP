@@ -10,7 +10,7 @@ public class TermPair {
         this.snd = new Term(snd, isConstant);
     }
 
-    public TermPair(Term fst, Term snd) {
+    TermPair(Term fst, Term snd) {
         this.fst = new Term(fst.getLabel(), fst.isConstant());
         this.snd = new Term(snd.getLabel(), snd.isConstant());
     }
@@ -20,9 +20,12 @@ public class TermPair {
         return "(" + fst + ", " + snd + ")";
     }
 
+    public String toHomomorphismString() {
+        return fst + " \u21A6 " + snd;
+    }
+
     public boolean equals(TermPair other) {
-        // TODO: implement
-        return false;
+        return other.fst.equalsT(fst) && other.fst.equalsT(snd);
     }
 
     public Term getFst() {

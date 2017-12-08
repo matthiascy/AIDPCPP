@@ -138,6 +138,14 @@ public class Atom {
         return true;
     }
 
+    public boolean hasVariable() {
+        return args.stream().anyMatch(Term::isVariable);
+    }
+
+    public boolean containsVariable(Term var) {
+        return args.stream().anyMatch(term -> term.equalsT(var));
+    }
+
     /**
      * Retourne la chaine de caracteres de cet atome
      *

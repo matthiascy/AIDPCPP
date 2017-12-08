@@ -4,7 +4,7 @@ public class Term
 {
 	private String label;//le nom du terme (par exemple : x, 'toto')
 	private boolean constant;//vrai si le terme courant est une constante, faux sinon (c'est une variable)
-		
+
 	/**
 	 * Constructeur de la classe Terme
 	 * @param n le label du terme
@@ -20,7 +20,7 @@ public class Term
 	    this.label = other.getLabel();
 	    this.constant = other.isConstant();
     }
-		
+
 	/**
 	 * Indique si le terme est une constante
 	 * @return vrai si le terme est une constante, faux sinon
@@ -29,7 +29,7 @@ public class Term
 	{
 		return constant;
 	}
-	
+
 	/**
 	 * Indique si le terme est une variable
 	 * @return vrai si le terme est une variable, faux sinon
@@ -38,7 +38,7 @@ public class Term
 	{
 		return !constant;
 	}
-	
+
 
 	/**
 	 * Accesseur en lecture
@@ -49,7 +49,7 @@ public class Term
 		return label;
 	}
 
-	
+
 	/**
 	 * Teste l'egalite du terme 't' et du terme courant (constante, label)
 	 * @param t le terme a tester
@@ -69,17 +69,14 @@ public class Term
 	{
 		return(label.compareTo(t.label));
 	}
-	
+
 	/**
 	 * Retourne la chaine de caracteres de ce terme
-	 * @return la chaine decrivant le terme 
+	 * @return la chaine decrivant le terme
 	 */
 	public String toString()
 	{
 		if (constant) return "'"+label+"'";
 		else return label;
 	}
-
-
-	
 }

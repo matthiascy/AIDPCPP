@@ -1,10 +1,8 @@
 import rbs.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
-public class Application1 {
+public class ApplicationOrder1 {
     private static void input(KnowledgeBase kb) {
         boolean done = false;
         Scanner reader = new Scanner(System.in);
@@ -12,17 +10,18 @@ public class Application1 {
             System.out.println("Enter a request consists of atoms('exit' to ):> ");
             String atomsStr = reader.nextLine();
 
-            if (atomsStr.equals("exit"))
-                done = true;
-            else
-                kb.handle_request(atomsStr);
+            if (!atomsStr.isEmpty()) {
+                if (atomsStr.equals("exit"))
+                    done = true;
+                else
+                    kb.handle_request(atomsStr);
+            }
 
         }
         reader.close();
     }
 
     public static void main(String args[]) {
-        boolean done = false;
         String filepath = "animal.txt";
         KnowledgeBase kb = new KnowledgeBase(filepath);
 

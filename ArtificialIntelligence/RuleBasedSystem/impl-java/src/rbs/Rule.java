@@ -139,6 +139,4 @@ public class Rule {
         s += conclusion;
         return s;
     }
-
-
 }

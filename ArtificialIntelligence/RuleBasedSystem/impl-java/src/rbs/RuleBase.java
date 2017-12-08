@@ -74,6 +74,4 @@ public class RuleBase {
             s += "\t Regle " + (i + 1) + " : " + rules.get(i) + "\n";
         return s;
     }
-
-
 }

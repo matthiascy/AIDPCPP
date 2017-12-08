@@ -1,17 +1,28 @@
 package rbs;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Homomorphisms {
-    private ArrayList<Atom> variables;
+    private ArrayList<Atom> atom_variables;
+    private ArrayList<Term> term_variables;
     private ArrayList<Atom> facts;
     private Substitutions solutions;
     private boolean calculated = false;
 
-    public Homomorphisms(ArrayList<Atom> variables, ArrayList<Atom> facts) {
-        this.variables = variables;
+    Homomorphisms(ArrayList<Atom> atomVars, ArrayList<Atom> facts) {
+        this.atom_variables = atomVars;
         this.facts = facts;
         this.solutions = new Substitutions();
+        this.term_variables = new ArrayList<>();
+        for (Atom atom : atom_variables) {
+            for (Term term : atom.getArgs()) {
+                if (term.isVariable()) {
+                    if (term_variables.stream().noneMatch(term1 -> term1.equalsT(term)))
+                        term_variables.add(term);
+                }
+            }
+        }
     }
 
     @Override
@@ -19,11 +30,7 @@ public class Homomorphisms {
         if (!calculated)
             generateAllMorphisms();
 
-        return "Homomorphisms {\n" +
-                "variables=\n\t" + variables +
-                ", \nfacts=\n\t" + facts +
-                ", \nsolutions=\n\t" + solutions +
-                "\n}";
+        return "Homomorphisms: \n\t" + solutions.getSubstitutions();
     }
 
     private void generateAllMorphisms() {
@@ -35,46 +42,53 @@ public class Homomorphisms {
     private Substitution backtrackAll(Substitution assignments) {
         Substitution result;
 
-        if (assignments.getVariables().size() == variables.size())
+        if (assignments.getVariables().size() == term_variables.size())
             return assignments;
 
-        Term var = chooseAtomVariable(assignments);
+        Term var = chooseVariable(assignments);
 
         if (var == null)
             return assignments;
 
-        for (Term val : getFactsConstant()) {
+        for (Term val : getVariableDom(assignments)) {
             TermPair tmp_pair = new TermPair(var, val);
-            assignments.add(tmp_pair);
+            if (assignments.add(tmp_pair)) {
 
-            if (!violation(assignments, tmp_pair)) {
-                result = backtrackAll(assignments);
+                if (!violation(assignments)) {
+                    result = backtrackAll(assignments);
 
-                if (result != null)
-                    solutions.addSolution(result);
+                    if (result != null)
+                        solutions.addSolution(result);
+                }
+
+                assignments.remove(tmp_pair);
+
             }
-
-            assignments.remove(tmp_pair);
         }
 
         return null;
     }
 
-    private Term chooseAtomVariable(Substitution assignments) {
-        for (Atom varAtom : variables) {
-            for (Term var : varAtom.getArgs())
-                if (assignments.getVariables().stream().noneMatch(v -> v.equalsT(var)))
-                    return var;
+    private Term chooseVariable(Substitution assignments) {
+        for (Term var : term_variables) {
+            if (assignments.getVariables().stream().noneMatch(term -> term.equalsT(var)))
+                return var;
         }
         return null;
     }
 
-    private ArrayList<Term> getFactsConstant() {
+    private ArrayList<Term> getVariableDom(Substitution assignments) {
         ArrayList<Term> out = new ArrayList<>();
+        // no duplicates
         for (Atom atom : facts) {
             for (Term term : atom.getArgs()) {
                 if (term.isConstant() && out.stream().noneMatch(term1 -> term1.equalsT(term))) {
-                    out.add(term);
+                    if (assignments.isEmpty())
+                        out.add(term);
+                    else
+                        for (TermPair pair : assignments)
+                            if (!pair.getSnd().equalsT(term))
+                                out.add(term);
                 }
             }
         }
@@ -82,20 +96,30 @@ public class Homomorphisms {
         return out;
     }
 
-    private boolean violation(Substitution assignments, TermPair varval) {
-        for (Atom atom : variables) {
-            for (Term term : atom.getArgs()) {
-                if (term.equalsT(varval.getFst())) {
-                    String atomstr = atom.toString();
-                    atomstr = atomstr.replace(varval.getFst().getLabel(), "\'" + varval.getSnd().getLabel() + "\'");
-                    atom = new Atom(atomstr);
+    private boolean violation(Substitution assignments) {
+        // Used to store the atom_variables in which variables have been partially replaced by assignment value
+        ArrayList<Atom> intermediate = new ArrayList<>(atom_variables);
+        ArrayList<Atom> tmp_atoms = new ArrayList<>();
+
+        for (TermPair pair : assignments) {
+            for (Atom atom : intermediate) {
+                for (Term term : atom.getArgs()) {
+                    if (term.equalsT(pair.getFst())) {
+                        String atomstr = atom.toString();
+                        atomstr = atomstr.replace(pair.getFst().getLabel(), "\'" + pair.getSnd().getLabel() + "\'");
+                        tmp_atoms.add(new Atom(atomstr));
+                    }
                 }
             }
 
-            Atom finalAtom = atom;
-            if (facts.stream().noneMatch(atom1 -> atom1.equalsA(finalAtom)))
-                return true;
+            intermediate = intermediate.stream().filter(atom -> !atom.containsVariable(pair.getFst())).collect(Collectors.toCollection(ArrayList::new));
+            intermediate.addAll(tmp_atoms);
         }
+
+        for (Atom atom : intermediate)
+            if (!atom.hasVariable())
+                if (facts.stream().noneMatch(atom1 -> atom1.equalsA(atom)))
+                    return true;
 
         return false;
     }

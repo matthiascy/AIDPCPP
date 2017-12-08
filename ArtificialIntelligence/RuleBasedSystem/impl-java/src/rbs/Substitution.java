@@ -3,7 +3,7 @@ package rbs;
 import java.util.ArrayList;
 
 public class Substitution extends ArrayList<TermPair> {
-    public Substitution() {
+    Substitution() {
         super();
     }
 
@@ -11,7 +11,7 @@ public class Substitution extends ArrayList<TermPair> {
         return (Substitution)super.clone();
     }
 
-    public ArrayList<Term> getVariables() {
+    ArrayList<Term> getVariables() {
         ArrayList<Term> out = new ArrayList<>();
         for (TermPair termPair : this) {
             out.add(termPair.getFst());
@@ -20,10 +20,17 @@ public class Substitution extends ArrayList<TermPair> {
     }
 
     @Override
+    public boolean add(TermPair pair) {
+        return this.stream().noneMatch(termpair -> termpair.equals(pair)) && super.add(pair);
+    }
+
+    @Override
     public String toString() {
         String str = "";
-        for (TermPair termPair :this)
-            str += termPair.toString();
+        str += "{";
+        for (TermPair termPair : this)
+            str += termPair.toHomomorphismString() + " ";
+        str += "}";
         return str;
     }
 }

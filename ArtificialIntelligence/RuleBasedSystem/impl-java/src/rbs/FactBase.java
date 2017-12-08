@@ -11,7 +11,7 @@ public class FactBase
 	private ArrayList<Atom> atoms; // l'ensemble des atomes
 	private ArrayList<Term> terms; // l'ensemble des termes apparaissant dans les atomes
 	// la liste des termes est triee par ordre lexicographique
-	
+
 	/**
 	 * Constructeur : cree une base de faits vide
 	 */
@@ -20,7 +20,7 @@ public class FactBase
 		atoms = new ArrayList<Atom>();
 		terms = new ArrayList<Term>();
 	}
-	
+
 	/**
 	 * Constructeur : initialise avec une chaine de caracteres correspondant a des atomes
 	 * @param factList : les faits, passes sous la forme "atom1;...;atomk"
@@ -29,7 +29,7 @@ public class FactBase
 	{
 		atoms = new ArrayList<Atom>();
 		terms = new ArrayList<Term>();
-		createFactBase(factList);	
+		createFactBase(factList);
 	}
 
 	public FactBase(ArrayList<Atom> facts)
@@ -41,7 +41,7 @@ public class FactBase
 				searchOrAddTerm(term);
 		}
 	}
-	
+
 	/**
 	 * Remplit la base de faits avec le chaine de caracteres passee en parametres
 	 * @param factList: les faits, passes sous la forme "atom1;...;atomk"
@@ -62,7 +62,7 @@ public class FactBase
    			}
    		}
    	}
-	
+
 
 	/**
 	 * Ajoute un terme a la liste des termes s'il n'existe pas deja.
@@ -71,25 +71,25 @@ public class FactBase
 	 */
 	private Term searchOrAddTerm(Term t)
 	//SI : dans le cas ou le terme t n'existe pas deja dans la liste des termes, on l'ajoute a la bonne place (par ordre lexicographique)
-	
+
 	{
 		int[] report; //la case d'indice 0 contiendra -1 si t apparait deja ; la case d'indice 1 contiendra la place de t, ou celle ou inserer t
-		
+
 		report = searchPosTerm(t,0,terms.size()-1);//on recherche la position ou (est/devrait etre) t
 		if(report[0]!= -1) terms.add(report[1],t);//Si t n'apparaissait pas auparavant, on l'ajoute a la liste des termes
 		return terms.get(report[1]);//On retourne le terme, soit t s'il a ete insere, soit le terme qui existait deja dans la liste des termes
-	} 
-	
+	}
+
 	/**
 	 * Cherche la position ou (se trouve/inserer) le terme 't'
-	 * @param t le  terme a inserer 
+	 * @param t le  terme a inserer
 	 * @return un tableau de deux entiers : la premiere case contient a -1 si le terme apparait deja. la seconde case contient la place ou doit etre insere le terme ou celle ou il apparait.
-	 */	
+	 */
 	private int[] searchPosTerm(Term t, int debut, int fin)
-	//SE : recherche le nom, de facon recursive, entre les indices debut et fin de la liste des termes. debut et fin 
+	//SE : recherche le nom, de facon recursive, entre les indices debut et fin de la liste des termes. debut et fin
 	//doivent obligatoirement etre des indices de la liste des termes.
 	//tableauReponses : la premiere case contient a -1 si le terme apparait deja
-		//				la seconde case contient la place ou doit etre insere le terme ou celle ou il apparait 
+		//				la seconde case contient la place ou doit etre insere le terme ou celle ou il apparait
 	{
 	  if (debut>fin)
 	  {
@@ -105,7 +105,7 @@ public class FactBase
 		  int[] report = new int[2];
 		  report[0] = -1;
 		  report[1] = milieu;
-		  return report; // et on sort 
+		  return report; // et on sort
 	  }
 	  if (compare > 0) return searchPosTerm(t,debut,milieu-1);
 	  return searchPosTerm(t,milieu+1,fin);
@@ -122,10 +122,10 @@ public class FactBase
 		  if (!belongsAtom(a)) addAtomWithoutCheck(a);
 		}
 	}
-	
+
 	/**
-	 * Ajoute un atome a la base de faits (meme si il y est deja) 
-	 * @param a l'atome a ajouter 
+	 * Ajoute un atome a la base de faits (meme si il y est deja)
+	 * @param a l'atome a ajouter
 	 */
 	public void addAtomWithoutCheck(Atom a)
 	{
@@ -144,11 +144,11 @@ public class FactBase
 	 * retourne la liste des atomes de la base de faits
 	 * @return la liste des atomes de la base de faits
 	 */
-	public ArrayList<Atom> getAtoms() 
+	public ArrayList<Atom> getAtoms()
 	{
 		return atoms;
-	}	
-	
+	}
+
 	/**
 	 * retourne la liste des termes de la base de faits
 	 * @return la liste des termes de la base de faits
@@ -158,16 +158,16 @@ public class FactBase
 		return terms;
 	}
 
-	
+
 	/**
 	 * teste si la base est vide
 	 * @return vrai si la base est vide
 	 */
-	public boolean isEmpty() 
+	public boolean isEmpty()
 	{
 		return atoms.isEmpty();
 	}
-	
+
 	/**
 	 * retourne le nombre de faits dans la base
 	 * @return le nombre de faits dans la base
@@ -177,8 +177,8 @@ public class FactBase
 		return atoms.size();
 	}
 
-	
-	
+
+
 	/**
 	 * Teste l'appartenance d'un atome a la base de faits
 	 * @param a l'atome dont on teste l'existence
@@ -191,8 +191,8 @@ public class FactBase
 					return true;
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Retourne une description de la base de faits
 	 * @return description de la base de faits
@@ -205,16 +205,15 @@ public class FactBase
 		else {
 			s = "La base contient "+atoms.size()+ " faits : \n";
 			for(int i=0;i<atoms.size()-1;i++)
-				s+=	atoms.get(i)+" ; ";	
+				s+=	atoms.get(i)+" ; ";
 			s+= atoms.get(atoms.size()-1)+"\n";
 			if (terms.size()>0) {
 				s+="\t Liste des termes : ";
 				for(int i=0;i<terms.size()-1;i++)
-					s+=	terms.get(i)+" ; ";	
+					s+=	terms.get(i)+" ; ";
 				s+= terms.get(terms.size()-1)+"\n";
 			}
 		}
 		return s;
 	}
 }
-	

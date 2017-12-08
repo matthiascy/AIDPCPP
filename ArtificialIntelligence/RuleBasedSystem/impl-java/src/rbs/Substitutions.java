@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 public class Substitutions {
     private ArrayList<Substitution> substitutions;
-    //private ArrayList<Atom> atoms;  // atoms that contain variables
     private ArrayList<Term> variables;
     private ArrayList<Term> value_terms;
 
@@ -14,7 +13,6 @@ public class Substitutions {
         this.substitutions = new ArrayList<>();
         this.variables = new ArrayList<>();
         this.value_terms = new ArrayList<>();
-//        this.atoms = new ArrayList<>();
     }
 
     public Substitutions(FactBase factBase, RuleBase ruleBase) {
@@ -22,8 +20,6 @@ public class Substitutions {
         value_terms = new ArrayList<>(factBase.getTerms());
         variables = new ArrayList<>();
         for (Rule r : ruleBase.getRules()) {
-  //          atoms.addAll(r.getHypothesis());
-//            atoms.add(r.getConclusion());
             variables.addAll(r.getTerms().stream().
                     filter(term -> (!term.isConstant() && !termListContains(variables, term))).
                     collect(Collectors.toCollection(ArrayList::new)));
